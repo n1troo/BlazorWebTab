@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebTab.Server", "BlazorWebTab\Server\BlazorWebTab.Server.csproj", "{FE1FCC70-5791-4983-A21E-17E7DED3B2C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebTab.Server", "BlazorWebTab\Server\BlazorWebTab.Server.csproj", "{FE1FCC70-5791-4983-A21E-17E7DED3B2C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebTab.Client", "BlazorWebTab\Client\BlazorWebTab.Client.csproj", "{4DE1A136-86C3-4795-935F-465D990FE2A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebTab.Client", "BlazorWebTab\Client\BlazorWebTab.Client.csproj", "{4DE1A136-86C3-4795-935F-465D990FE2A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebTab.Shared", "BlazorWebTab\Shared\BlazorWebTab.Shared.csproj", "{803A437D-521D-48C8-9BBB-74604AEE5BD8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebTab.Shared", "BlazorWebTab\Shared\BlazorWebTab.Shared.csproj", "{803A437D-521D-48C8-9BBB-74604AEE5BD8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
