@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.ResponseCompression;
+global using Microsoft.EntityFrameworkCore;
+using BlazorWebTab.Server.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +11,16 @@ builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+builder.Services.AddDbContext<DataContext>(optionsAction =>
+{
+    optionsAction.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
+var app = builder.Build();
 app.UseSwaggerUI();
+
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
