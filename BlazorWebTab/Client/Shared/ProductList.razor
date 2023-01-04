@@ -28,6 +28,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Products = await _HttpClient.GetFromJsonAsync<List<Product>>("api/Product");
+        try
+        {
+            var result = await _HttpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/Product");
+            if (result != null && result.Data != null)
+            {
+                Products = result.Data;
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }
