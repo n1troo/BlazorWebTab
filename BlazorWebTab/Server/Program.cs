@@ -13,7 +13,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>(optionsAction =>
 {
-    optionsAction.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    optionsAction.UseSqlServer(builder.Configuration.GetConnectionString("DellLaptop"));
+    //optionsAction.UseSqlServer(builder.Configuration.GetConnectionString("RogLaptop"));
 });
 
 var app = builder.Build();
