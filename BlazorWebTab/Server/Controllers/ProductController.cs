@@ -1,5 +1,7 @@
-﻿using BlazorWebTab.Shared;
+﻿using BlazorWebTab.Server.Data;
+using BlazorWebTab.Shared;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace BlazorWebTab.Server.Controllers;
 
@@ -7,13 +9,17 @@ namespace BlazorWebTab.Server.Controllers;
 [ApiController]
 public class ProductController : ControllerBase
 {
-    private static List<Product> Products = new List<Product>();
+    private readonly DataContext _dbContext;
 
-
+    public ProductController(DataContext dbContext )
+    {
+        _dbContext = dbContext;
+    }
+    
     [HttpGet]
     public async Task<ActionResult<List<Product>>> GetProduct()
     {
-        return Ok(Products);
+        var products = await _dbContext.Products.ToListAsync();
+        return Ok(products);
     }
-
 }
