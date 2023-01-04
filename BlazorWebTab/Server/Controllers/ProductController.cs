@@ -1,4 +1,5 @@
 ﻿using BlazorWebTab.Server.Data;
+using BlazorWebTab.Server.Services.ProductService;
 using BlazorWebTab.Shared;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,23 +10,18 @@ namespace BlazorWebTab.Server.Controllers;
 [ApiController]
 public class ProductController : ControllerBase
 {
-    private readonly DataContext _dbContext;
+    private readonly IProductService _productService;
 
-
-    public ProductController(DataContext dbContext )
+    public ProductController(IProductService productService)
     {
-        _dbContext = dbContext;
+        _productService = productService;
     }
-    
+ 
     [HttpGet]
     public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProduct()
     {
-        var products = await _dbContext.Products.ToListAsync();
-        var response = new ServiceResponse<List<Product>>()
-        {
-            Data = products
-        };
+        var result = await _productService.GetProductsAsync();
 
-        return Ok(response);
+        return Ok(result);
     }
 }

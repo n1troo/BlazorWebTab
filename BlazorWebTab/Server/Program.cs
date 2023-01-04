@@ -1,5 +1,6 @@
-global using Microsoft.EntityFrameworkCore;
 using BlazorWebTab.Server.Data;
+using BlazorWebTab.Server.Services.ProductService;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,14 +14,14 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>(optionsAction =>
 {
-    optionsAction.UseSqlServer(builder.Configuration.GetConnectionString("DellLaptop"));
-    //optionsAction.UseSqlServer(builder.Configuration.GetConnectionString("RogLaptop"));
+    //optionsAction.UseSqlServer(builder.Configuration.GetConnectionString("DellLaptop"));
+    optionsAction.UseSqlServer(builder.Configuration.GetConnectionString("RogLaptop"));
 });
+
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 app.UseSwaggerUI();
-
-
 
 
 // Configure the HTTP request pipeline.

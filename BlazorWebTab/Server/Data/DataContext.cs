@@ -1,4 +1,5 @@
 ﻿using BlazorWebTab.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazorWebTab.Server.Data
 {
