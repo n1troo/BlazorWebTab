@@ -2,9 +2,14 @@
 
 @inject IProductService ProductService;
 
-@if (ProductService.Products != null)
+
+@if (ProductService.Products.Count == 0)
 {
-    <h3>Products: @ProductService.Products.Count()</h3>
+    <h3>Products: Loading...</h3>
+}
+else
+{
+    <h3>Products: @ProductService.Products.Count</h3>
     <ul class="list-unstyled">
         @foreach (var product in ProductService.Products)
         {
@@ -27,7 +32,11 @@
 }
 
 
+
+
 @code {
+
+
 
     protected override async Task OnInitializedAsync()
     {

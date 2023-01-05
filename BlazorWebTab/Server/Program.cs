@@ -14,8 +14,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>(optionsAction =>
 {
-    //optionsAction.UseSqlServer(builder.Configuration.GetConnectionString("DellLaptop"));
-    optionsAction.UseSqlServer(builder.Configuration.GetConnectionString("RogLaptop"));
+    optionsAction.UseSqlServer(builder.Configuration.GetConnectionString("DataBaseString"));
 });
 
 builder.Services.AddScoped<IProductService, ProductService>();

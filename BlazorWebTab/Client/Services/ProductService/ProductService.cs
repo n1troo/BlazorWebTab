@@ -6,7 +6,7 @@ namespace BlazorWebTab.Client.Services.ProductService;
 public class ProductService : IProductService
 {
     private readonly HttpClient _httpClient;
-    public List<Product> Products { get; set; }
+    public List<Product> Products { get; set; } = new List<Product>();
 
     public ProductService(HttpClient httpClient)
     {
