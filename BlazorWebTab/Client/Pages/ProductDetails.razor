@@ -1,0 +1,53 @@
+﻿@page "/product/{ProductId:int}"
+
+@inject IProductService ProductService
+@inject NavigationManager NavigationManager
+
+@if (product != null)
+{
+    <div class="media">
+        <div class="media-img-wrapper mr-2">
+            <img class="media-img" src="@product.ImageUrl" alt="@product.Title"/>
+        </div>
+        <div class="accordion-body">
+            <h4 class="mb-0">@product.Title</h4>
+            <p>@product.Description</p>
+            <h5 class="price">$@product.Price</h5>
+            <a href="/product/"></a>
+        </div>
+
+        <div class="btn btn-primary" @onclick="Back">Back to list</div>
+    </div>
+}
+else
+{
+    <span>@message...</span>
+}
+
+@code {
+
+    [Parameter]
+    public int ProductId { get; set; }
+    private Product? product = null;
+    private string message = "Loading product";
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var result = await ProductService.GetproductById(ProductId);
+        if (result.Success)
+        {
+            product = result.Data;
+        }
+        else
+        {
+            message = result.Message;
+        }
+    }
+
+    public void Back()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+}
