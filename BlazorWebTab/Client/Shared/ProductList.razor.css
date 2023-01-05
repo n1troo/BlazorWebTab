@@ -10,13 +10,7 @@
     transform: scale(1.2);
 }
 
-.media{
-    display: flex;
-    align-items: flex-start;
-}
-.media-body {
-    flex:1px;
-}
+
 
 .media-img-wrapper {
     width: 200px;
