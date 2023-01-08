@@ -1,5 +1,7 @@
 ﻿@using BlazorWebTab.Client.Services.ProductService
 
+@implements IDisposable;
+
 @inject IProductService ProductService;
 
 
@@ -33,9 +35,14 @@ else
 
 @code {
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await ProductService.GetProducts();
+        ProductService.ProductChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        ProductService.ProductChanged -= StateHasChanged;
     }
 
 }

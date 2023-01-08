@@ -6,6 +6,7 @@ namespace BlazorWebTab.Client.Services.ProductService;
 public class ProductService : IProductService
 {
     private readonly HttpClient _httpClient;
+    public event Action? ProductChanged;
     public List<Product?> Products { get; set; } = new();
     
     public ProductService(HttpClient httpClient)
@@ -13,12 +14,23 @@ public class ProductService : IProductService
         _httpClient = httpClient;
     }
 
-    public async Task GetProducts()
+    public async Task GetProducts(string? categoryUrl = null)
     {
-        var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/Product");
+        string endpoint;
+
+        if (categoryUrl == null)
+            endpoint = "api/Product";
+        else
+            endpoint = $"api/Product/category/{categoryUrl}";
+
+        var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>(endpoint);
+            
         if (result != null && result.Data != null) 
-            Products = result.Data;
+                Products = result.Data;
+        
+        ProductChanged.Invoke();
     }
+    
 
     public async Task<ServiceResponse<Product>> GetproductById(int productId)
     {

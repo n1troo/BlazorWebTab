@@ -22,4 +22,6 @@ public class CategoryController : Controller
       var result = await _categoryService.GetCategories();
       return Ok(result);
    }
+
+
 }

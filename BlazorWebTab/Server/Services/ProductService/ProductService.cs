@@ -17,7 +17,8 @@ public class ProductService : IProductService
     {
         var response = new ServiceResponse<List<Product>>
         {
-            Data = await _dbContext.Products.ToListAsync()
+            Data = await _dbContext.Products.ToListAsync(),
+            Success = true
         };
 
         return response;
@@ -25,20 +26,24 @@ public class ProductService : IProductService
 
     public async Task<ServiceResponse<Product>> GetProduct(int productId)
     {
-        var product = await _dbContext.Products.FindAsync(productId);
-        var response = new ServiceResponse<Product>();
-
-        if (product == null)
+        var response = new ServiceResponse<Product>
         {
-            response.Message = "There is no product";
-            response.Success = false;
-        }
-        else
-        {
-            response.Success = true;
-            response.Data = product;
-        }
+            Data = await _dbContext.Products.FindAsync(productId),
+            Success = true
+        };
 
+        return response;
+    }
+
+    public async Task<ServiceResponse<List<Product>>> GetProductsByCategory(string categoryUrl)
+    {
+        var response = new ServiceResponse<List<Product>>()
+        {
+            Data = await _dbContext.Products
+                .Where(s => s.Category.Url.ToLower() == categoryUrl.ToLower())
+                .ToListAsync(),
+            Success = true
+        };
         return response;
     }
 }
