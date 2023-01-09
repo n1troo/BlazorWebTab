@@ -1,6 +1,7 @@
 ﻿using BlazorWebTab.Server.Data;
 using BlazorWebTab.Shared;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BlazorWebTab.Server.Services.ProductService;
 
@@ -15,20 +16,42 @@ public class ProductService : IProductService
 
     public async Task<ServiceResponse<List<Product>>> GetProducts()
     {
-        var response = new ServiceResponse<List<Product>>
+        try
         {
-            Data = await _dbContext.Products.ToListAsync(),
-            Success = true
-        };
+            var response = new ServiceResponse<List<Product>>();
+            var result
+                = await _dbContext.Products
+                    .Include(i => i.Variants)
+                    .ToListAsync();
 
-        return response;
+            if(result == null)
+            {
+                response.Success = false;
+                response.Message = "No Product matches the given query";
+            }
+            else
+            {
+                response.Data = result;
+                response.Success = true;
+            }
+            return response;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        
     }
 
     public async Task<ServiceResponse<Product>> GetProduct(int productId)
     {
         var response = new ServiceResponse<Product>
         {
-            Data = await _dbContext.Products.FindAsync(productId),
+            Data = await _dbContext.Products
+                .Include(i => i.Variants)
+                .ThenInclude(p => p.ProductType)
+                .FirstOrDefaultAsync(p=>p.Id == productId),
             Success = true
         };
 
@@ -41,6 +64,7 @@ public class ProductService : IProductService
         {
             Data = await _dbContext.Products
                 .Where(s => s.Category.Url.ToLower() == categoryUrl.ToLower())
+                .Include(ii=>ii.Variants)
                 .ToListAsync(),
             Success = true
         };

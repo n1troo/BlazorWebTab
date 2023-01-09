@@ -12,15 +12,12 @@
         <div class="accordion-body">
             <h4 class="mb-0">@product.Title</h4>
             <p>@product.Description</p>
-            @*<h5 class="price">$@product.Price</h5>*@
+            @* <h5 class="price">$@product.Price</h5> *@
             <a href="/product/"></a>
         </div>
+
+        <div class="btn btn-primary" @onclick="Back">Back to list</div>
     </div>
-    <div class="text-break">
-        <br/>
-        <div class="btn btn-primary" @onclick="Back">Back to products list</div>
-    </div>
-    
 }
 else
 {
