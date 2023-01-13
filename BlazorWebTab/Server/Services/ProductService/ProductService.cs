@@ -1,4 +1,5 @@
-﻿using BlazorWebTab.Server.Data;
+﻿using System.Diagnostics;
+using BlazorWebTab.Server.Data;
 using BlazorWebTab.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -69,5 +70,52 @@ public class ProductService : IProductService
             Success = true
         };
         return response;
+    }
+
+    public async Task<ServiceResponse<List<Product>>> SearchProduct(string searchText)
+    {
+        var responce = new ServiceResponse<List<Product>>()
+        {
+            Data = await FindProductsBySearchText(searchText)
+        };
+
+        return responce;
+    }
+
+    private async Task<List<Product>> FindProductsBySearchText(string searchText)
+    {
+        return await _dbContext.Products
+            .Where(p=>p.Title.ToLower().Contains(searchText.ToLower()) 
+                      || p.Description.ToLower().Contains(searchText.ToLower()))
+            .Include(s=>s.Variants)
+            .ToListAsync();
+    }
+
+    public async Task<ServiceResponse<List<string>>> GetProductSearchSuggestions(string searchText)
+    {
+        var products = await FindProductsBySearchText(searchText);
+        List<string> results = new List<string>();
+        foreach (var product in products)
+        {
+            if(product.Title.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                results.Add(product.Title);
+
+            if (product.Description.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+            {
+                var punctuation = product.Description.Where(char.IsPunctuation).Distinct().ToArray();
+                var words = product.Description.Split().Select(s => s.Trim(punctuation));
+
+                foreach (var word in words.Distinct())
+                {
+                    if(word.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                        results.Add(word);
+                }
+                
+            }
+            
+        }
+
+        return new ServiceResponse<List<string>>(){Data = results, Success = true};
+
     }
 }

@@ -6,6 +6,9 @@ namespace BlazorWebTab.Client.Services.ProductService;
 public class ProductService : IProductService
 {
     private readonly HttpClient _httpClient;
+
+    public string Message { get; set; } = "Products loading...";
+    
     public event Action? ProductChanged;
     public List<Product?> Products { get; set; } = new();
     
@@ -28,7 +31,7 @@ public class ProductService : IProductService
         if (result != null && result.Data != null) 
                 Products = result.Data;
         
-        ProductChanged.Invoke();
+        ProductChanged?.Invoke();
     }
     
 
@@ -36,5 +39,27 @@ public class ProductService : IProductService
     {
         var result = await _httpClient.GetFromJsonAsync<ServiceResponse<Product>>($"api/Product/{productId}");
         return result;
+    }
+
+    public async Task<List<string>> GetProductSearchSuggestions(string searchText)
+    {
+        var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<string>>>($"api/Product/searchsuggestions/{searchText}");
+        return result.Data;
+    }
+
+    public async Task SearchProduct(string searchText)
+    {
+        var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/Product/search/{searchText}");
+
+        if (result != null)
+        {
+            Products = result.Data;
+        }
+
+        if (Products.Count() == 0)
+            Message = "No products found.";
+        
+        ProductChanged?.Invoke();
+
     }
 }

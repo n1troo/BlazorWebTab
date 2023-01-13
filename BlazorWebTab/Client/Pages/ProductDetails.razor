@@ -11,8 +11,18 @@
         </div>
         <div class="accordion-body">
             <h4 class="mb-0">@product.Title</h4>
-            <p>@product.Description</p>
-            @* <h5 class="price">$@product.Price</h5> *@
+            @if (GetSelectedVariant() != null)
+            {
+                @if (GetSelectedVariant().OriginalPrice > GetSelectedVariant().Price)
+                {
+                    <h6 class="text-muted original-price">
+                        $@GetSelectedVariant().OriginalPrice
+                    </h6>
+                }
+                <h4 class="price">
+                    $@GetSelectedVariant().Price
+                </h4>
+            }
             <a href="/product/"></a>
         </div>
 
@@ -30,19 +40,28 @@ else
     public int ProductId { get; set; }
     private Product? product = null;
     private string message = "Loading product";
-
-
+    private int _currentTypeId = 1;
+    
     protected override async Task OnParametersSetAsync()
     {
         var result = await ProductService.GetproductById(ProductId);
         if (result.Success)
         {
             product = result.Data;
+            if (product != null && product.Variants.Count > 0)
+            {
+                _currentTypeId = product.Variants[0].ProductTypeId;
+            }
         }
         else
         {
             message = result.Message;
         }
+    }
+
+    private ProductVariant GetSelectedVariant()
+    {
+        return product.Variants.FirstOrDefault(v => v.ProductTypeId == _currentTypeId);
     }
 
     public void Back()
