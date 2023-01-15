@@ -1,11 +1,10 @@
 ﻿@page "/"
 @page "/search/{searchText}"
 @page "/{categoryUrl}"
+@using System.Diagnostics
 
 @inject IProductService ProductService;
-
 <PageTitle>Shop list</PageTitle>
-
 <ProductList/>
 
 
@@ -22,7 +21,8 @@
         if (SearchText != null)
             await ProductService.SearchProduct(SearchText);
         else
+        {
             await ProductService.GetProducts(CategoryUrl);
+        }
     }
-
 }
