@@ -61,7 +61,8 @@ public class DataContext : DbContext
                 Description =
                     "Rozpoczęło się pospieszne gromadzenie wojsk, jednak zadanie jest ponad nasze siły. Aby pozyskać sojuszników, ziemskie legiony zostają wysłane na Świat Krwi.",
                 ImageUrl = "https://cf-taniaksiazka.statiki.pl/images/large/181/978836705331033.jpg",
-                CategoryId = 1
+                CategoryId = 1,
+                Featured = true
             },
             new Product
             {
@@ -79,7 +80,8 @@ public class DataContext : DbContext
                 Title = "Back to the Future",
                 Description =
                     "Back to the Future is a 1985 American science fiction film directed by Robert Zemeckis. Written by Zemeckis and Bob Gale, it stars Michael J. Fox, Christopher Lloyd, Lea Thompson, Crispin Glover, and Thomas F. Wilson. Set in 1985, the story follows Marty McFly (Fox), a teenager accidentally sent back to 1955 in a time-traveling DeLorean automobile built by his eccentric scientist friend Doctor Emmett \"Doc\" Brown (Lloyd). Trapped in the past, Marty inadvertently prevents his future parents' meeting—threatening his very existence—and is forced to reconcile the pair and somehow get back to the future.",
-                ImageUrl = "https://upload.wikimedia.org/wikipedia/en/d/d2/Back_to_the_Future.jpg"
+                ImageUrl = "https://upload.wikimedia.org/wikipedia/en/d/d2/Back_to_the_Future.jpg",
+                Featured = true
             },
             new Product
             {
@@ -106,7 +108,8 @@ public class DataContext : DbContext
                 Title = "Diablo II",
                 Description =
                     "Diablo II is an action role-playing hack-and-slash computer video game developed by Blizzard North and published by Blizzard Entertainment in 2000 for Microsoft Windows, Classic Mac OS, and macOS.",
-                ImageUrl = "https://upload.wikimedia.org/wikipedia/en/d/d5/Diablo_II_Coverart.png"
+                ImageUrl = "https://upload.wikimedia.org/wikipedia/en/d/d5/Diablo_II_Coverart.png",
+                Featured = true
             },
             new Product
             {
