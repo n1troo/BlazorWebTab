@@ -9,7 +9,7 @@ namespace BlazorWebTab.Server.Services.ProductService;
 public class ProductService : IProductService
 {
     private readonly DataContext _dbContext;
-
+    
     public ProductService(DataContext dbContext)
     {
         _dbContext = dbContext;
@@ -107,15 +107,23 @@ public class ProductService : IProductService
 
                 foreach (var word in words.Distinct())
                 {
-                    if(word.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                    if (word.Contains(searchText, StringComparison.OrdinalIgnoreCase))
                         results.Add(word);
                 }
-                
             }
-            
         }
-
         return new ServiceResponse<List<string>>(){Data = results, Success = true};
+    }
 
+    public async Task<ServiceResponse<List<Product>>> GetFeaturedProducts()
+    {
+        var results = await _dbContext.Products.
+            Where(s => s.Featured)
+            .Include(s=>s.Variants)
+            .ToListAsync();
+        
+        var returned =  new ServiceResponse<List<Product>>(){ Data = results, Success = true };
+
+        return returned;
     }
 }
