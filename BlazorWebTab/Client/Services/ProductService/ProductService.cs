@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using BlazorWebTab.Shared;
+using BlazorWebTab.Shared.DTOs;
 
 namespace BlazorWebTab.Client.Services.ProductService;
 
@@ -7,7 +8,10 @@ public class ProductService : IProductService
 {
     private readonly HttpClient _httpClient;
     public string Message { get; set; } = "Products loading...";
-    
+    public int CurrentPage { get; set; }
+    public int PageCount { get; set; }
+    public string LastSearchText { get; set; }
+
     public event Action? ProductChanged;
     public List<Product?> Products { get; set; } = new();
     
@@ -45,13 +49,13 @@ public class ProductService : IProductService
         return result.Data;
     }
 
-    public async Task SearchProduct(string searchText)
+    public async Task SearchProduct(string searchText, int page)
     {
-        var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/Product/search/{searchText}");
+        var result = await _httpClient.GetFromJsonAsync<ServiceResponse<ProductSearchResultDTO>>($"api/Product/search/{searchText}/{page}");
 
         if (result != null)
         {
-            Products = result.Data;
+            Products = result.Data.Products;
         }
 
         if (Products.Count() == 0)

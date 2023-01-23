@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using BlazorWebTab.Server.Data;
 using BlazorWebTab.Shared;
+using BlazorWebTab.Shared.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -72,11 +73,25 @@ public class ProductService : IProductService
         return response;
     }
 
-    public async Task<ServiceResponse<List<Product>>> SearchProduct(string searchText)
+    public async Task<ServiceResponse<ProductSearchResultDTO>> SearchProduct(string searchText, int page)
     {
-        var responce = new ServiceResponse<List<Product>>()
+        var pageResults = 2f;
+        var pageConut = Math.Ceiling((await FindProductsBySearchText(searchText)).Count / pageResults);
+        var products = await _dbContext.Products.Where(s => s.Featured)
+            .Include(s => s.Variants)
+            .Skip((page - 1) * (int)pageResults)
+            .Take((int)pageResults)
+            .ToListAsync();
+        
+
+        var responce = new ServiceResponse<ProductSearchResultDTO>()
         {
-            Data = await FindProductsBySearchText(searchText)
+            Data = new ProductSearchResultDTO()
+            {
+                CurrentPage = page,
+                Pages = (int)pageConut,
+                Products = products
+            }
         };
 
         return responce;

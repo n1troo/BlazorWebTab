@@ -1,6 +1,7 @@
 ﻿using BlazorWebTab.Server.Data;
 using BlazorWebTab.Server.Services.ProductService;
 using BlazorWebTab.Shared;
+using BlazorWebTab.Shared.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -38,10 +39,10 @@ public class ProductController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("search/{searchText}")]
-    public async Task<ActionResult<ServiceResponse<Product>>> SearchProducts(string searchText)
+    [HttpGet("search/{searchText}/{page}")]
+    public async Task<ActionResult<ServiceResponse<ProductSearchResultDTO>>> SearchProducts(string searchText, int page)
     {
-        var result = await _productService.SearchProduct(searchText);
+        var result = await _productService.SearchProduct(searchText, page);
         return Ok(result);
     }
 
