@@ -17,7 +17,7 @@ namespace BlazorWebTab.Client.Services.ProductService
         Task GetProducts(string? categoryUrl = null);
         Task<ServiceResponse<Product>> GetproductById(int productId);
         
-        Task  SearchProduct(string searchText, int page);
+        Task SearchProduct(string searchText, int page);
         Task<List<string>> GetProductSearchSuggestions(string searchText);
         
     }

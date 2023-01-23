@@ -8,9 +8,9 @@ public class ProductService : IProductService
 {
     private readonly HttpClient _httpClient;
     public string Message { get; set; } = "Products loading...";
-    public int CurrentPage { get; set; }
-    public int PageCount { get; set; }
-    public string LastSearchText { get; set; }
+    public int CurrentPage { get; set; } = 1;
+    public int PageCount { get; set; } = 0;
+    public string LastSearchText { get; set; } = string.Empty;
 
     public event Action? ProductChanged;
     public List<Product?> Products { get; set; } = new();
@@ -33,7 +33,14 @@ public class ProductService : IProductService
             
         if (result != null && result.Data != null) 
                 Products = result.Data;
-        
+
+        CurrentPage = 1;
+        PageCount = 0;
+
+        if (Products.Count == 0)
+        {
+            Message = "No products fund";
+        }
         ProductChanged?.Invoke();
     }
     
@@ -51,11 +58,16 @@ public class ProductService : IProductService
 
     public async Task SearchProduct(string searchText, int page)
     {
+        if(searchText != null)
+            LastSearchText = searchText;
+        
         var result = await _httpClient.GetFromJsonAsync<ServiceResponse<ProductSearchResultDTO>>($"api/Product/search/{searchText}/{page}");
 
         if (result != null)
         {
             Products = result.Data.Products;
+            PageCount = PageCount;
+            CurrentPage = CurrentPage;
         }
 
         if (Products.Count() == 0)

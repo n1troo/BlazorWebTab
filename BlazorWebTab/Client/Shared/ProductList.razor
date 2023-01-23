@@ -26,15 +26,21 @@ else
                         <h4 class="mb-0">@product.Title</h4>
                     </a>
                     <p>@product.Description</p>
-                    <h5 class="price">@ShowPriceOfProduct(@product)</h5>
+                    <h5 class="price">@ShowPriceOfProduct(product)</h5>
                 </div>
             </li>
         }
     </ul>
+    for (var i = 0; i < @ProductService.PageCount; i++)
+    {
+        <a class="btn @(i == @ProductService.CurrentPage ? "btn-info" : "btn-outline-info")
+           page-selection"
+           href="/search/@ProductService.LastSearchText/@i">@i</a>
+    }
 }
 
-@code {
-
+@code 
+{
     protected override void OnInitialized()
     {
         ProductService.ProductChanged += StateHasChanged;
@@ -52,11 +58,6 @@ else
         {
             return "No price set";
         }
-        else
-        {
-            return $"Price is between {product.Variants.Min(s => s.Price)} - {product.Variants.Max(s => s.Price)}";
-        }
-        
+        return $"Price is between {product.Variants.Min(s => s.Price)} - {product.Variants.Max(s => s.Price)}";
     }
-
 }
