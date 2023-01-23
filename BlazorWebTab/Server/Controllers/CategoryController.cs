@@ -7,7 +7,7 @@ namespace BlazorWebTab.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CategoryController : Controller
+public class CategoryController : ControllerBase
 {
    private readonly ICategoryService _categoryService;
 
