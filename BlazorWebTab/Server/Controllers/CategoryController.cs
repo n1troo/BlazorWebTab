@@ -14,7 +14,10 @@ public class CategoryController : ControllerBase
     {
         _categoryService = categoryService;
     }
-
+    /// <summary>
+    /// List of all categories
+    /// </summary>
+    /// <returns>Category list</returns>
     [HttpGet]
     public async Task<ActionResult<ServiceResponse<List<Category>>>> GetCategories()
     {
