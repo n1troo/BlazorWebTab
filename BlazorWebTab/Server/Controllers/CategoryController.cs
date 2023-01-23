@@ -22,6 +22,4 @@ public class CategoryController : ControllerBase
       var result = await _categoryService.GetCategories();
       return Ok(result);
    }
-
-
 }
