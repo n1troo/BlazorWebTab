@@ -1,9 +1,7 @@
-﻿using BlazorWebTab.Server.Data;
-using BlazorWebTab.Server.Services.ProductService;
+﻿using BlazorWebTab.Server.Services.ProductService;
 using BlazorWebTab.Shared;
 using BlazorWebTab.Shared.DTOs;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace BlazorWebTab.Server.Controllers;
 
@@ -17,7 +15,7 @@ public class ProductController : ControllerBase
     {
         _productService = productService;
     }
- 
+
     [HttpGet]
     public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProducts()
     {
@@ -31,7 +29,7 @@ public class ProductController : ControllerBase
         var result = await _productService.GetProduct(productId);
         return Ok(result);
     }
-    
+
     [HttpGet("category/{categoryUrl}")]
     public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProductByCategory(string categoryUrl)
     {

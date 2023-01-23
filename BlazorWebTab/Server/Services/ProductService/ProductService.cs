@@ -1,16 +1,14 @@
-﻿using System.Diagnostics;
-using BlazorWebTab.Server.Data;
+﻿using BlazorWebTab.Server.Data;
 using BlazorWebTab.Shared;
 using BlazorWebTab.Shared.DTOs;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace BlazorWebTab.Server.Services.ProductService;
 
 public class ProductService : IProductService
 {
     private readonly DataContext _dbContext;
-    
+
     public ProductService(DataContext dbContext)
     {
         _dbContext = dbContext;
@@ -26,7 +24,7 @@ public class ProductService : IProductService
                     .Include(i => i.Variants)
                     .ToListAsync();
 
-            if(result == null)
+            if (result == null)
             {
                 response.Success = false;
                 response.Message = "No Product matches the given query";
@@ -36,6 +34,7 @@ public class ProductService : IProductService
                 response.Data = result;
                 response.Success = true;
             }
+
             return response;
         }
         catch (Exception e)
@@ -43,7 +42,6 @@ public class ProductService : IProductService
             Console.WriteLine(e);
             throw;
         }
-        
     }
 
     public async Task<ServiceResponse<Product>> GetProduct(int productId)
@@ -53,7 +51,7 @@ public class ProductService : IProductService
             Data = await _dbContext.Products
                 .Include(i => i.Variants)
                 .ThenInclude(p => p.ProductType)
-                .FirstOrDefaultAsync(p=>p.Id == productId),
+                .FirstOrDefaultAsync(p => p.Id == productId),
             Success = true
         };
 
@@ -62,11 +60,11 @@ public class ProductService : IProductService
 
     public async Task<ServiceResponse<List<Product>>> GetProductsByCategory(string categoryUrl)
     {
-        var response = new ServiceResponse<List<Product>>()
+        var response = new ServiceResponse<List<Product>>
         {
             Data = await _dbContext.Products
                 .Where(s => s.Category.Url.ToLower() == categoryUrl.ToLower())
-                .Include(ii=>ii.Variants)
+                .Include(ii => ii.Variants)
                 .ToListAsync(),
             Success = true
         };
@@ -82,11 +80,11 @@ public class ProductService : IProductService
             .Skip((page - 1) * (int)pageResults)
             .Take((int)pageResults)
             .ToListAsync();
-        
 
-        var responce = new ServiceResponse<ProductSearchResultDTO>()
+
+        var responce = new ServiceResponse<ProductSearchResultDTO>
         {
-            Data = new ProductSearchResultDTO()
+            Data = new ProductSearchResultDTO
             {
                 CurrentPage = page,
                 Pages = (int)pageConut,
@@ -97,22 +95,13 @@ public class ProductService : IProductService
         return responce;
     }
 
-    private async Task<List<Product>> FindProductsBySearchText(string searchText)
-    {
-        return await _dbContext.Products
-            .Where(p=>p.Title.ToLower().Contains(searchText.ToLower()) 
-                      || p.Description.ToLower().Contains(searchText.ToLower()))
-            .Include(s=>s.Variants)
-            .ToListAsync();
-    }
-
     public async Task<ServiceResponse<List<string>>> GetProductSearchSuggestions(string searchText)
     {
         var products = await FindProductsBySearchText(searchText);
-        List<string> results = new List<string>();
+        var results = new List<string>();
         foreach (var product in products)
         {
-            if(product.Title.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+            if (product.Title.Contains(searchText, StringComparison.OrdinalIgnoreCase))
                 results.Add(product.Title);
 
             if (product.Description.Contains(searchText, StringComparison.OrdinalIgnoreCase))
@@ -121,24 +110,31 @@ public class ProductService : IProductService
                 var words = product.Description.Split().Select(s => s.Trim(punctuation));
 
                 foreach (var word in words.Distinct())
-                {
                     if (word.Contains(searchText, StringComparison.OrdinalIgnoreCase))
                         results.Add(word);
-                }
             }
         }
-        return new ServiceResponse<List<string>>(){Data = results, Success = true};
+
+        return new ServiceResponse<List<string>> { Data = results, Success = true };
     }
 
     public async Task<ServiceResponse<List<Product>>> GetFeaturedProducts()
     {
-        var results = await _dbContext.Products.
-            Where(s => s.Featured)
-            .Include(s=>s.Variants)
+        var results = await _dbContext.Products.Where(s => s.Featured)
+            .Include(s => s.Variants)
             .ToListAsync();
-        
-        var returned =  new ServiceResponse<List<Product>>(){ Data = results, Success = true };
+
+        var returned = new ServiceResponse<List<Product>> { Data = results, Success = true };
 
         return returned;
+    }
+
+    private async Task<List<Product>> FindProductsBySearchText(string searchText)
+    {
+        return await _dbContext.Products
+            .Where(p => p.Title.ToLower().Contains(searchText.ToLower())
+                        || p.Description.ToLower().Contains(searchText.ToLower()))
+            .Include(s => s.Variants)
+            .ToListAsync();
     }
 }

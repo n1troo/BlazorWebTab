@@ -1,6 +1,4 @@
-﻿@using BlazorWebTab.Client.Services.ProductService
-
-@implements IDisposable;
+﻿@implements IDisposable;
 
 @inject IProductService ProductService;
 
@@ -31,15 +29,17 @@ else
             </li>
         }
     </ul>
-    for (var i = 0; i < @ProductService.PageCount; i++)
+    for (var i = 0; i < ProductService.PageCount; i++)
     {
-        <a class="btn @(i == @ProductService.CurrentPage ? "btn-info" : "btn-outline-info")
+        <a class="btn @(i == ProductService.CurrentPage ? "btn-info" : "btn-outline-info")
            page-selection"
-           href="/search/@ProductService.LastSearchText/@i">@i</a>
+           href="/search/@ProductService.LastSearchText/@i">
+            @i
+        </a>
     }
 }
 
-@code 
+@code
 {
     protected override void OnInitialized()
     {

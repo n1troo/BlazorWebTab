@@ -11,7 +11,7 @@
 else
 {
     <div class="container">
-        @foreach (var product in ProductService.Products.Where(s=>s.Featured == true))
+        @foreach (var product in ProductService.Products.Where(s => s.Featured))
         {
             <div class="featured-product">
                 <div>
@@ -19,7 +19,9 @@ else
                         <img src="@product.ImageUrl"/>
                     </a>
                 </div>
-                <h6><a href="product/@product.Id">@product.Title</a></h6>
+                <h6>
+                    <a href="product/@product.Id">@product.Title</a>
+                </h6>
                 @if (product.Variants != null && product.Variants.Count > 0)
                 {
                     <h5 class="price">

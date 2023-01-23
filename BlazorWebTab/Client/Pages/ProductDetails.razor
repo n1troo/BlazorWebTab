@@ -38,10 +38,11 @@ else
 
     [Parameter]
     public int ProductId { get; set; }
-    private Product? product = null;
+
+    private Product? product;
     private string message = "Loading product";
     private int _currentTypeId = 1;
-    
+
     protected override async Task OnParametersSetAsync()
     {
         var result = await ProductService.GetproductById(ProductId);

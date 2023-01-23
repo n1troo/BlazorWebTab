@@ -1,7 +1,6 @@
 ﻿@page "/"
 @page "/search/{searchText}/{page:int}"
 @page "/{categoryUrl}"
-@using System.Diagnostics
 
 @inject IProductService ProductService;
 <PageTitle>Shop list</PageTitle>
@@ -12,15 +11,14 @@
 else
 {
     <ProductList/>
-
 }
 
 
 @code
 {
     [Parameter]
-    public string? CategoryUrl { get; set; } = null;
-    
+    public string? CategoryUrl { get; set; }
+
     [Parameter]
     public string? SearchText { get; set; }
 

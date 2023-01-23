@@ -1,5 +1,4 @@
-﻿@using System.Collections.Specialized
-@inject IProductService ProductService
+﻿@inject IProductService ProductService
 @inject NavigationManager NavigationManager
 
 <div class="input-group">
@@ -26,7 +25,7 @@
 
 @code {
     private string _searchText = string.Empty;
-    private List<string> _suggestions = new List<string>();
+    private List<string> _suggestions = new();
     protected ElementReference SearchInput;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -48,7 +47,7 @@
         {
             if (keyboardEventArgs.Key.Equals("Backspace") && _searchText.Length == 0)
             {
-                NavigationManager.NavigateTo($"/");
+                NavigationManager.NavigateTo("/");
             }
             else if (keyboardEventArgs.Key.Equals("Enter"))
             {
