@@ -16,13 +16,15 @@
 }
 
 @media (max-width: 1023.98px) {
-    
-    .media{
+
+    .media {
         flex-direction: column;
     }
+
     .media-img {
         max-width: 300px;
     }
+
     .media-img-wrapper {
         width: 100%;
         height: auto;
