@@ -32,7 +32,7 @@ public class CartService : ICartService
     private async Task<List<CarItem>?> CartItems()
     {
         var cart = await _localStorageService.GetItemAsync<List<CarItem>>("cart");
-        if (cart != null)
+        if (cart == null)
         {
             cart = new List<CarItem>();
         }
