@@ -1,7 +1,9 @@
 ﻿@page "/product/{ProductId:int}"
 
-@inject IProductService ProductService
-@inject NavigationManager NavigationManager
+
+@inject IProductService _ProductService
+@inject NavigationManager _NavigationManager
+@inject ICartService _CartService;
 
 @if (product != null)
 {
@@ -25,7 +27,10 @@
             }
             <a href="/product/"></a>
         </div>
-
+        <div class="btn btn-primary" @onclick="AddToCart">
+            <i class="oi oi-cart">Add to cart</i>
+        </div>
+        
         <div class="btn btn-primary" @onclick="Back">Back to list</div>
     </div>
 }
@@ -45,7 +50,7 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        var result = await ProductService.GetproductById(ProductId);
+        var result = await _ProductService.GetproductById(ProductId);
         if (result.Success)
         {
             product = result.Data;
@@ -67,7 +72,19 @@ else
 
     public void Back()
     {
-        NavigationManager.NavigateTo("/");
+        _NavigationManager.NavigateTo("/");
+    }
+
+    private async Task AddToCart()
+    {
+        var productVariant = GetSelectedVariant();
+        var carItem = new CarItem()
+        {
+            ProductId = productVariant.ProductId,
+            ProductTypeId = productVariant.ProductTypeId
+        };
+
+        _CartService.AddToCart(carItem);
     }
 
 }
