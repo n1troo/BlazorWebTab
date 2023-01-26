@@ -1,9 +1,9 @@
 ﻿@page "/"
-@page "/search/{searchText}"
+@page "/search/{searchText}/{page:int}"
 @page "/{categoryUrl}"
-@using System.Diagnostics
 
 @inject IProductService ProductService;
+
 <PageTitle>Shop list</PageTitle>
 @if (CategoryUrl == null && SearchText == null)
 {
@@ -12,22 +12,23 @@
 else
 {
     <ProductList/>
-
 }
-
 
 @code
 {
     [Parameter]
     public string? CategoryUrl { get; set; } = null;
-    
+
     [Parameter]
-    public string? SearchText { get; set; }
+    public string? SearchText { get; set; } = null;
+
+    [Parameter]
+    public int Page { get; set; } = 1;
 
     protected override async Task OnParametersSetAsync()
     {
         if (SearchText != null)
-            await ProductService.SearchProduct(SearchText);
+            await ProductService.SearchProduct(SearchText, Page);
         else
         {
             await ProductService.GetProducts(CategoryUrl);

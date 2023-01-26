@@ -7,7 +7,8 @@ namespace BlazorWebTab.Client.Services.ProductService;
 public class ProductService : IProductService
 {
     private readonly HttpClient _httpClient;
-
+    public event Action? ProductChanged;
+    
     public ProductService(HttpClient httpClient)
     {
         _httpClient = httpClient;
@@ -15,10 +16,9 @@ public class ProductService : IProductService
 
     public string Message { get; set; } = "Products loading...";
     public int CurrentPage { get; set; } = 1;
-    public int PageCount { get; set; }
+    public int PageCount { get; set; } = 0;
     public string LastSearchText { get; set; } = string.Empty;
 
-    public event Action? ProductChanged;
     public List<Product?> Products { get; set; } = new();
 
     public async Task GetProducts(string? categoryUrl = null)
@@ -58,18 +58,17 @@ public class ProductService : IProductService
 
     public async Task SearchProduct(string searchText, int page)
     {
-        if (searchText != null)
-            LastSearchText = searchText;
+        LastSearchText = searchText;
 
         var result =
             await _httpClient.GetFromJsonAsync<ServiceResponse<ProductSearchResultDTO>>(
                 $"api/Product/search/{searchText}/{page}");
 
-        if (result != null)
+        if (result != null && result.Data != null)
         {
             Products = result.Data.Products;
-            PageCount = PageCount;
-            CurrentPage = CurrentPage;
+            PageCount = result.Data.Pages;
+            CurrentPage = result.Data.CurrentPage;
         }
 
         if (Products.Count() == 0)

@@ -75,6 +75,7 @@ public class ProductService : IProductService
     {
         var pageResults = 2f;
         var pageConut = Math.Ceiling((await FindProductsBySearchText(searchText)).Count / pageResults);
+        
         var products = await _dbContext.Products.Where(s => s.Featured)
             .Include(s => s.Variants)
             .Skip((page - 1) * (int)pageResults)
@@ -93,6 +94,15 @@ public class ProductService : IProductService
         };
 
         return responce;
+    }
+
+    private async Task<List<Product>> FindProductsBySearchText(string searchText)
+    {
+        return await _dbContext.Products
+            .Where(p => p.Title.ToLower().Contains(searchText.ToLower())
+                        || p.Description.ToLower().Contains(searchText.ToLower()))
+            .Include(s => s.Variants)
+            .ToListAsync();
     }
 
     public async Task<ServiceResponse<List<string>>> GetProductSearchSuggestions(string searchText)
@@ -127,14 +137,5 @@ public class ProductService : IProductService
         var returned = new ServiceResponse<List<Product>> { Data = results, Success = true };
 
         return returned;
-    }
-
-    private async Task<List<Product>> FindProductsBySearchText(string searchText)
-    {
-        return await _dbContext.Products
-            .Where(p => p.Title.ToLower().Contains(searchText.ToLower())
-                        || p.Description.ToLower().Contains(searchText.ToLower()))
-            .Include(s => s.Variants)
-            .ToListAsync();
     }
 }
