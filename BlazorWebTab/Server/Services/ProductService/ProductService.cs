@@ -74,9 +74,11 @@ public class ProductService : IProductService
     public async Task<ServiceResponse<ProductSearchResultDTO>> SearchProduct(string searchText, int page)
     {
         var pageResults = 2f;
-        var pageConut = Math.Ceiling((await FindProductsBySearchText(searchText)).Count / pageResults);
+        var foundProducts = await FindProductsBySearchText(searchText);
+        var pageConut = Math.Ceiling(foundProducts.Count / pageResults);
         
-        var products = await _dbContext.Products.Where(s => s.Featured)
+        var products = await _dbContext.Products.
+            Where(p => p.Title.ToLower().Contains(searchText.ToLower()) || p.Description.ToLower().Contains(searchText.ToLower()))
             .Include(s => s.Variants)
             .Skip((page - 1) * (int)pageResults)
             .Take((int)pageResults)
