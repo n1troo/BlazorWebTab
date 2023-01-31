@@ -1,4 +1,4 @@
-﻿using Blazored.LocalStorage;
+﻿ using Blazored.LocalStorage;
 using BlazorWebTab.Shared;
 
 namespace BlazorWebTab.Client.Services.CartService;
