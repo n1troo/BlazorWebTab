@@ -1,7 +1,9 @@
 using BlazorWebTab.Server.Data;
+using BlazorWebTab.Server.Services.CartService;
 using BlazorWebTab.Server.Services.CategoryService;
 using BlazorWebTab.Server.Services.ProductService;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,8 @@ builder.Services.AddDbContext<DataContext>(optionsAction =>
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICartService, CartService>();
+
 
 var app = builder.Build();
 app.UseSwaggerUI();
