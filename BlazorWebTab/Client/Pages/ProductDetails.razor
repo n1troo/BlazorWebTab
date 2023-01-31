@@ -1,9 +1,9 @@
 ﻿@page "/product/{ProductId:int}"
 
 
-@inject IProductService _ProductService
-@inject NavigationManager _NavigationManager
-@inject ICartService _CartService;
+@inject IProductService ProductService
+@inject NavigationManager NavigationManager
+@inject ICartService CartService;
 
 @if (product != null)
 {
@@ -50,7 +50,7 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        var result = await _ProductService.GetproductById(ProductId);
+        var result = await ProductService.GetproductById(ProductId);
         if (result.Success)
         {
             product = result.Data;
@@ -72,7 +72,7 @@ else
 
     public void Back()
     {
-        _NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/");
     }
 
     private async Task AddToCart()
@@ -84,7 +84,7 @@ else
             ProductTypeId = productVariant.ProductTypeId
         };
 
-        _CartService.AddToCart(carItem);
+        await CartService.AddToCart(carItem);
     }
 
 }

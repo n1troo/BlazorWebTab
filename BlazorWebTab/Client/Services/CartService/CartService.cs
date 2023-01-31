@@ -6,7 +6,7 @@ namespace BlazorWebTab.Client.Services.CartService;
 public class CartService : ICartService
 {
     private readonly ILocalStorageService _localStorageService;
-    public event Action? OnChange;
+    public event Action? OnCartChange;
 
     public CartService(ILocalStorageService localStorageService)
     {
@@ -21,6 +21,8 @@ public class CartService : ICartService
             cart.Add(cartItem);
             await _localStorageService.SetItemAsync<List<CarItem>>("cart", cart);
         }
+        
+        OnCartChange.Invoke();;
     }
 
     public async Task<List<CarItem>> GetCartItems()

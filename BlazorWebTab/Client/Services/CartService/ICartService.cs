@@ -4,7 +4,7 @@ namespace BlazorWebTab.Client.Services.CartService;
 
 public interface ICartService
 {
-    event Action OnChange;
+    event Action OnCartChange;
     Task AddToCart(CarItem cartItem);
     Task<List<CarItem>> GetCartItems();
 }
