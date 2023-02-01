@@ -1,0 +1,63 @@
+﻿@page "/Cart"
+@using BlazorWebTab.Shared.DTOs
+@inject ICartService CartService
+
+<PageTitle>Shopping cart</PageTitle>
+@if (CartProducts.Count == 0)
+{
+    <span><h3>@message</h3></span>
+}
+else
+{
+    <div>
+        <div><h2>Shopping cart:</h2></div>
+        <div class="cart-product-price">
+            Total count is @CartProducts.Count and sum = (@CartProducts.Sum(s => s.Price))
+        </div>
+
+        @foreach (var product in CartProducts)
+        {
+            <div class="container">
+                <div class="image-wrapper">
+                    <img src="@product.ImageUrl" class="image"/>
+                </div>
+                <div class="name">
+                    <a href="product/@product.ProductId">@product.Title</a>
+                    <h5><span>@product.ProductType</span></h5>
+                </div>
+                <div class="cart-product-price">$@product.Price</div>
+            </div>
+            <Button class="btn btn-dark" @onclick="@(()=> RemoveItem(@product))">Remove</Button>
+        }
+    </div>
+}
+
+
+@code {
+
+    List<CartProductResponceDto> CartProducts = new List<CartProductResponceDto>();
+    
+    string message = "cart items are loading";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await CartService.GetCartItems();
+        if (result.Count == 0)
+        {
+            message = "Your cart is empty";
+        }
+        else
+        {
+            var cart = await CartService.GetCartProducts();
+            CartProducts.AddRange(cart);
+            message = $"Total items in your cart= {cart.Count}";
+        }
+    }
+
+    private async Task RemoveItem(CartProductResponceDto product)
+    {
+        await CartService.RemoveProductFromCart(product.ProductId, product.ProductTypeId);
+        StateHasChanged();
+    }
+
+}

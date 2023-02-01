@@ -21,7 +21,7 @@ namespace BlazorWebTab.Server.Controllers
             _cartService = cartService;
         }
 
-        [HttpPost("pproducts")]
+        [HttpPost("products")]
         public async Task<ActionResult<ServiceResponse<List<ProductSearchResultDTO>>>> GetCartProducts([FromBody] List<CarItem> cartItems)
         {
             var result = await _cartService.GetCartProducts(cartItems);

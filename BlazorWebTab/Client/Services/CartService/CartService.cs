@@ -1,16 +1,20 @@
-﻿ using Blazored.LocalStorage;
+﻿ using System.Net.Http.Json;
+ using Blazored.LocalStorage;
 using BlazorWebTab.Shared;
+ using BlazorWebTab.Shared.DTOs;
 
-namespace BlazorWebTab.Client.Services.CartService;
+ namespace BlazorWebTab.Client.Services.CartService;
 
 public class CartService : ICartService
 {
     private readonly ILocalStorageService _localStorageService;
+    private readonly HttpClient _httpClient;
     public event Action? OnCartChange;
 
-    public CartService(ILocalStorageService localStorageService)
+    public CartService(ILocalStorageService localStorageService, HttpClient httpClient)
     {
         _localStorageService = localStorageService;
+        _httpClient = httpClient;
     }
 
     public async Task AddToCart(CarItem cartItem)
@@ -29,6 +33,31 @@ public class CartService : ICartService
     {
         var cart = await CartItems();
         return cart;
+    }
+
+    public async Task<List<CartProductResponceDto>> GetCartProducts()
+    {
+        var cartitems = await _localStorageService.GetItemAsync<List<CarItem>>("cart");
+        var responseMessage = await _httpClient.PostAsJsonAsync($"api/cart/products", cartitems);
+        var carProducts = responseMessage.Content.ReadFromJsonAsync<ServiceResponse<List<CartProductResponceDto>>>();
+
+        return carProducts.Result.Data;
+    }
+
+    public async Task RemoveProductFromCart(int productId, int productTypeId)
+    {
+        var cartItems = await _localStorageService.GetItemAsync<List<CarItem>>("cart");
+        var itemsToRemove = cartItems.Where(ci => ci.ProductId == productId && ci.ProductTypeId == productTypeId).ToList();
+        
+        cartItems.RemoveAll(s => itemsToRemove.Contains(s));
+
+        await _localStorageService.ClearAsync();
+
+        foreach (var item in cartItems)
+        {
+            AddToCart(item);
+        }
+
     }
 
     private async Task<List<CarItem>?> CartItems()
