@@ -22,7 +22,16 @@ public class CartService : ICartService
         var cart = await CartItems();
         if (cart != null)
         {
-            cart.Add(cartItem);
+            var sameId = cart.Find(x => x.ProductId == cartItem.ProductId && x.ProductTypeId == cartItem.ProductTypeId);
+            if (sameId == null)
+            {
+                cart.Add(cartItem);
+            }
+            else
+            {
+                sameId.Quantity += cartItem.Quantity;
+            }
+           
             await _localStorageService.SetItemAsync<List<CarItem>>("cart", cart);
         }
         
@@ -47,21 +56,39 @@ public class CartService : ICartService
     public async Task RemoveProductFromCart(int productId, int productTypeId)
     {
         var cartItems = await _localStorageService.GetItemAsync<List<CarItem>>("cart");
-        var itemsToRemove = cartItems.Where(ci => ci.ProductId == productId && ci.ProductTypeId == productTypeId).ToList();
+        if (cartItems == null) {
+            return;
+        }
         
+        var itemsToRemove = cartItems.Where(ci => ci.ProductId == productId && ci.ProductTypeId == productTypeId).ToList();
         cartItems.RemoveAll(s => itemsToRemove.Contains(s));
 
         await _localStorageService.SetItemAsync("cart", cartItems);
 
-        // await _localStorageService.ClearAsync();
-        //
-        // foreach (var item in cartItems)
-        // {
-        //     AddToCart(item);
-        // }
-        
         OnCartChange.Invoke();
 
+    }
+
+    public async Task UpdateQuentity(CartProductResponceDto product)
+    {
+        var cartItems = await _localStorageService.GetItemAsync<List<CarItem>>("cart");
+        if (cartItems == null) {
+            return;
+        }
+
+        var item = cartItems.Find(ci =>
+            ci.ProductId == product.ProductId && ci.ProductTypeId == product.ProductTypeId);
+
+        if (item != null)
+        {
+            item.Quantity += product.Quantity;
+            await _localStorageService.SetItemAsync("cart", cartItems);
+            OnCartChange.Invoke();
+            
+            //TODO Zrobić liczenie dodawanych elementów przez dodaj a nie zmiane w quantity 
+        }
+
+        
     }
 
     private async Task<List<CarItem>?> CartItems()

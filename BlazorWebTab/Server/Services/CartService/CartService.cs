@@ -49,7 +49,8 @@ public class CartService : ICartService
                 ImageUrl = product.ImageUrl,
                 Price = variant.Price,
                 ProductType = variant.ProductType.Name,
-                ProductTypeId = variant.ProductTypeId
+                ProductTypeId = variant.ProductTypeId,
+                Quantity = cartItem.Quantity
             };
             
             result.Data.Add(cartprod);

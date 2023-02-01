@@ -24,11 +24,11 @@ else
                 <div class="name">
                     <a href="product/@product.ProductId">@product.Title</a>
                     <h5><span>@product.ProductType</span></h5>
-                    <Button class="btn btn-dark" @onclick="@(()=> RemoveItemFormCart(@product))">Remove</Button>
+                    <h2>@product.Quantity</h2>
+                    <Button class="btn btn-danger" @onclick="@(()=> RemoveItemFormCart(@product))">Remove</Button>
                 </div>
                 <div class="cart-product-price">$@product.Price</div>
             </div>
-            
         }
     </div>
 }
