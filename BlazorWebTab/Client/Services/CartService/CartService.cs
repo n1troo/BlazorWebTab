@@ -51,12 +51,16 @@ public class CartService : ICartService
         
         cartItems.RemoveAll(s => itemsToRemove.Contains(s));
 
-        await _localStorageService.ClearAsync();
+        await _localStorageService.SetItemAsync("cart", cartItems);
 
-        foreach (var item in cartItems)
-        {
-            AddToCart(item);
-        }
+        // await _localStorageService.ClearAsync();
+        //
+        // foreach (var item in cartItems)
+        // {
+        //     AddToCart(item);
+        // }
+        
+        OnCartChange.Invoke();
 
     }
 

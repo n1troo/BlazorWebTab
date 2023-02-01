@@ -24,10 +24,11 @@ else
                 <div class="name">
                     <a href="product/@product.ProductId">@product.Title</a>
                     <h5><span>@product.ProductType</span></h5>
+                    <Button class="btn btn-dark" @onclick="@(()=> RemoveItemFormCart(@product))">Remove</Button>
                 </div>
                 <div class="cart-product-price">$@product.Price</div>
             </div>
-            <Button class="btn btn-dark" @onclick="@(()=> RemoveItem(@product))">Remove</Button>
+            
         }
     </div>
 }
@@ -41,23 +42,31 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadCart();
+    }
+
+    private async Task RemoveItemFormCart(CartProductResponceDto product)
+    {
+        await CartService.RemoveProductFromCart(product.ProductId, product.ProductTypeId);
+        await LoadCart();
+    }
+
+    private async Task LoadCart()
+    {
         var result = await CartService.GetCartItems();
         if (result.Count == 0)
         {
             message = "Your cart is empty";
+            CartProducts = new List<CartProductResponceDto>();
         }
         else
         {
             var cart = await CartService.GetCartProducts();
+            CartProducts = new List<CartProductResponceDto>();
             CartProducts.AddRange(cart);
+            
             message = $"Total items in your cart= {cart.Count}";
         }
-    }
-
-    private async Task RemoveItem(CartProductResponceDto product)
-    {
-        await CartService.RemoveProductFromCart(product.ProductId, product.ProductTypeId);
-        StateHasChanged();
     }
 
 }
