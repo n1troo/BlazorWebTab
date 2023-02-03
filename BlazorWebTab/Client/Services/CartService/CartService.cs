@@ -9,12 +9,14 @@ public class CartService : ICartService
 {
     private readonly ILocalStorageService _localStorageService;
     private readonly HttpClient _httpClient;
+    private readonly ILogger<CartService> _logger;
     public event Action? OnCartChange;
 
-    public CartService(ILocalStorageService localStorageService, HttpClient httpClient)
+    public CartService(ILocalStorageService localStorageService, HttpClient httpClient, ILogger<CartService> logger)
     {
         _localStorageService = localStorageService;
         _httpClient = httpClient;
+        _logger = logger;
     }
 
     public async Task AddToCart(CarItem cartItem)
@@ -29,7 +31,7 @@ public class CartService : ICartService
             }
             else
             {
-                sameId.Quantity += cartItem.Quantity;
+                sameId.Quantity += 1;
             }
            
             await _localStorageService.SetItemAsync<List<CarItem>>("cart", cart);
@@ -71,21 +73,19 @@ public class CartService : ICartService
 
     public async Task UpdateQuentity(CartProductResponceDto product)
     {
-        var cartItems = await _localStorageService.GetItemAsync<List<CarItem>>("cart");
-        if (cartItems == null) {
+        var cart = await _localStorageService.GetItemAsync<List<CarItem>>("cart");
+        if (cart == null) {
             return;
         }
-
-        var item = cartItems.Find(ci =>
-            ci.ProductId == product.ProductId && ci.ProductTypeId == product.ProductTypeId);
-
-        if (item != null)
+        
+        var foundItems = cart.Find(ci => ci.ProductId == product.ProductId && ci.ProductTypeId == product.ProductTypeId);
+        
+        
+        if (foundItems != null)
         {
-            item.Quantity += product.Quantity;
-            await _localStorageService.SetItemAsync("cart", cartItems);
+            foundItems.Quantity = product.Quantity;
+            await _localStorageService.SetItemAsync("cart", cart);
             OnCartChange.Invoke();
-            
-            //TODO Zrobić liczenie dodawanych elementów przez dodaj a nie zmiane w quantity 
         }
 
         

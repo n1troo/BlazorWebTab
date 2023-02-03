@@ -9,8 +9,8 @@
 }
 
 .image {
-    max-height: 75px;
-    max-width: 75px;
+    max-height: 120px;
+    max-width: 120px;
     padding: 2px;
 }
 .name {
@@ -19,5 +19,27 @@
 }
 .cart-product-price{
     font-weight: 600;
+   
+}
+.btn-delete {
+    background: red;
+    border: black;
+    padding: 0px;
+    font-size: 10px;
+}
+
+.input-quantity {
+    width: 70px;
+}
+
+.summary-price {
+    font-weight: bold;
+    margin-right: auto;
     text-align: right;
+    padding: 4px;
+    width: auto;
+    background-color: #ffcd39;
+    border: none;
+    box-shadow: 1px 1px 2px #bbbbbb;
+    cursor: pointer;
 }

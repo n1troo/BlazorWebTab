@@ -17,5 +17,6 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddLogging();
 
 await builder.Build().RunAsync();

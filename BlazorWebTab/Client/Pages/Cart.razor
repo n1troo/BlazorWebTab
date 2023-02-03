@@ -11,9 +11,7 @@ else
 {
     <div>
         <div><h2>Shopping cart:</h2></div>
-        <div class="cart-product-price">
-            Total count is @CartProducts.Count and sum = (@CartProducts.Sum(s => s.Price))
-        </div>
+       
 
         @foreach (var product in CartProducts)
         {
@@ -24,12 +22,21 @@ else
                 <div class="name">
                     <a href="product/@product.ProductId">@product.Title</a>
                     <h5><span>@product.ProductType</span></h5>
-                    <h2>@product.Quantity</h2>
-                    <Button class="btn btn-danger" @onclick="@(()=> RemoveItemFormCart(@product))">Remove</Button>
+                    <h4><span class="price">@product.Price</span></h4>
+                    
+                    <input type="number" value="@product.Quantity"
+                           @onchange="@((ChangeEventArgs e) => UpdateQuantity(e, product))"
+                           class="form-control input-quantity"
+                           min="1"/>
+                    
+                    <Button class="btn btn-danger btn-delete" @onclick="@(()=> RemoveItemFormCart(@product))">Remove</Button>
                 </div>
-                <div class="cart-product-price">$@product.Price</div>
+                <div class="cart-product-price">$@(product.Price * product.Quantity)</div>
             </div>
+            
+            
         }
+        <div class="summary-price">Total count is (@CartProducts.Sum(s => s.Quantity)) and sum = (@CartProducts.Sum(s => s.Price * s.Quantity))</div>
     </div>
 }
 
@@ -67,6 +74,15 @@ else
             
             message = $"Total items in your cart= {cart.Count}";
         }
+    }
+
+    private async Task UpdateQuantity(ChangeEventArgs e, CartProductResponceDto product)
+    {
+        product.Quantity = (int) int.Parse(e.Value.ToString());
+        if (product.Quantity < 1) 
+            product.Quantity = 1;
+
+        await CartService.UpdateQuentity(product);
     }
 
 }
