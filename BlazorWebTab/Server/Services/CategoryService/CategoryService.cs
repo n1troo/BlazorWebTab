@@ -1,7 +1,8 @@
 ﻿using BlazorWebTab.Server.Data;
-using BlazorWebTab.Server.Services.CategoryService;
 using BlazorWebTab.Shared;
 using Microsoft.EntityFrameworkCore;
+
+namespace BlazorWebTab.Server.Services.CategoryService;
 
 public class CategoryService : ICategoryService
 {

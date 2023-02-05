@@ -1,6 +1,6 @@
 ﻿using BlazorWebTab.Shared;
 
-namespace BlazorWebTab.Client.Services;
+namespace BlazorWebTab.Client.Services.CategoryService;
 
 public interface ICategoryService
 {

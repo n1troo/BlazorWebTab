@@ -1,0 +1,39 @@
+﻿@page "/register"
+@using BlazorWebTab.Shared.Users
+<PageTitle>Registration page</PageTitle>
+
+<EditForm Model="_userRegister" OnValidSubmit="HandleRegistation"> 
+    <div class="mb-3">
+        <label for="email">Email</label>
+        <InputText id="email" @bind-Value="_userRegister.Email" class="form-control"/>
+    </div>
+    <div class="mb-3">
+        <label for="password">Password</label>
+        <InputText id="password" @bind-Value="_userRegister.Password" class="form-control" type="Password"/>
+    </div>
+    <div class="mb-3">
+        <label for="confirmpassword">Confirm you password</label>
+        <InputText id="confirmpassword" @bind-Value="_userRegister.ConfirmPassword" class="form-control" type="Password"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</EditForm>
+
+<div class="btn-group">
+    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Right-aligned menu
+    </button>
+    <div class="dropdown-menu dropdown-menu-right">
+        <button class="dropdown-item" type="button">Action</button>
+        <button class="dropdown-item" type="button">Another action</button>
+        <button class="dropdown-item" type="button">Something else here</button>
+    </div>
+</div>
+
+@code {
+    UserRegister _userRegister = new UserRegister();
+
+    void HandleRegistation()
+    {
+        Console.WriteLine($"Register user with the email {_userRegister.Email}");
+    }
+}
