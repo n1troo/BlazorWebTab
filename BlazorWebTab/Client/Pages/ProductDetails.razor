@@ -13,26 +13,42 @@
         </div>
         <div class="accordion-body">
             <h4 class="mb-0">@product.Title</h4>
+            <p>@product.Description</p>
+            @if (product.Variants != null && product.Variants.Count > 1)
+                {
+                    <div class="mb-3">
+                        <select class="form-select" @bind="_currentTypeId">
+                            @foreach (var variant in product.Variants)
+                            {
+                                <option value="@variant.ProductTypeId">@variant.ProductType.Name</option>
+                            }
+                        </select>
+                    </div>
+                }
+            
             @if (GetSelectedVariant() != null)
             {
                 @if (GetSelectedVariant().OriginalPrice > GetSelectedVariant().Price)
                 {
                     <h6 class="text-muted original-price">
-                        $@GetSelectedVariant().OriginalPrice
+                        @GetSelectedVariant().OriginalPrice $
                     </h6>
                 }
+               
                 <h4 class="price">
                     $@GetSelectedVariant().Price
                 </h4>
             }
-            <a href="/product/"></a>
+            
+            <div class="btn btn-primary" @onclick="AddToCart">
+                <i class="oi oi-cart">Add to cart</i>
+            </div>
+            <div class="btn btn-primary" @onclick="Back">Back to list</div>
         </div>
-        <div class="btn btn-primary" @onclick="AddToCart">
-            <i class="oi oi-cart">Add to cart</i>
-        </div>
-        
-        <div class="btn btn-primary" @onclick="Back">Back to list</div>
+       
+
     </div>
+    
 }
 else
 {
