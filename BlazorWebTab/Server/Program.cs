@@ -1,4 +1,5 @@
 using BlazorWebTab.Server.Data;
+using BlazorWebTab.Server.Services.AuthService;
 using BlazorWebTab.Server.Services.CartService;
 using BlazorWebTab.Server.Services.CategoryService;
 using BlazorWebTab.Server.Services.ProductService;
@@ -23,6 +24,7 @@ builder.Services.AddDbContext<DataContext>(optionsAction =>
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 
 var app = builder.Build();
