@@ -5,6 +5,7 @@
       <map>
         <entry key="Common:buildConfiguration" value="Debug" />
         <entry key="Common:dbContext" value="BlazorWebTab.Server.Data.DataContext" />
+        <entry key="Common:fe1fcc70-5791-4983-a21e-17e7ded3b2c0:dbContext" value="BlazorWebTab.Server.Data.DataContext" />
         <entry key="Common:noBuild" value="false" />
         <entry key="Common:outputFolder" value="Migrations" />
         <entry key="Common:targetFramework" value="net6.0" />
