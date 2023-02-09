@@ -30,7 +30,7 @@ public class AuthService : IAuthService
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             
-            return new ServiceResponse<int>() { Success = true, Data = user.Id};
+            return new ServiceResponse<int>() { Success = true, Data = user.Id, Message = "User created!"};
         }
     }
 

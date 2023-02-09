@@ -1,0 +1,15 @@
+﻿@inject NavigationManager _NavigationManager
+
+
+
+<button class="btn btn-dark" @onclick="() => GoSwagger()">Swagger</button>
+
+@code {
+
+    private async Task GoSwagger()
+    {
+        //_NavigationManager.NavigateTo("/swagger");
+        _NavigationManager.NavigateTo("https://localhost:7093/swagger/index.html");
+
+    }
+}
