@@ -30,6 +30,7 @@ namespace BlazorWebTab.Server.Controllers
             };
 
             var response = await _authService.Register(user, userRegister.Password);
+            
             if (!response.Success)
                 return BadRequest(response);
             return Ok(response);
