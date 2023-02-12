@@ -1,0 +1,47 @@
+﻿@page "/login"
+@inject IAuthService AuthService;
+
+@using BlazorWebTab.Shared.Users
+@using BlazorWebTab.Client.Services.AuthService
+
+<EditForm Model="_userLogin" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator/>
+    @* <ValidationSummary/> *@
+    <div class="mb-3">
+        <label for="email">Email</label>
+        <InputText id="email" @bind-Value="_userLogin.Email" class="form-control"/>
+        <ValidationMessage For="() => _userLogin.Email"/>
+    </div>
+    <div class="mb-3">
+        <label for="password">Password</label>
+        <InputText id="password" @bind-Value="_userLogin.Password" class="form-control" type="Password"/>
+        <ValidationMessage For="() => _userLogin.Password"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+    
+    <div class="text-success">
+        <span>@responseMessage</span>
+    </div>
+    
+</EditForm>
+
+@code {
+
+    private string responseMessage = string.Empty;
+    UserLogin _userLogin = new UserLogin();
+    
+
+    private async Task HandleLogin()
+    {
+        var result = await AuthService.UserLogin(_userLogin);
+        if (!result.Success)
+        {
+            responseMessage = result.Message;
+        }
+        else
+        {
+            responseMessage = "ok";
+        }
+        
+    }
+}

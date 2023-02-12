@@ -6,9 +6,6 @@
 
 <PageTitle>Registration page</PageTitle>
 
-
-
-
 <EditForm Model="_userRegister" OnValidSubmit="HandleRegistation">
     <DataAnnotationsValidator/>
     @* <ValidationSummary/> *@
@@ -28,20 +25,28 @@
         <ValidationMessage For="() => _userRegister.ConfirmPassword"/>
     </div>
     <button type="submit" class="btn btn-primary">Register</button>
-    <div class="text-danger">
-        <span>@errorMessage</span>
+    <div class="@messageCss">
+        <span>@responseMessage</span>
     </div>
 </EditForm>
 
 @code {
     UserRegister _userRegister = new UserRegister();
-    private string errorMessage = string.Empty;
+    
+    private string responseMessage = string.Empty;
+    private string messageCss = string.Empty;
 
     async Task HandleRegistation()
     {
         Console.WriteLine($"Register user with the email {_userRegister.Email}");
         var response = await AuthService.Register(_userRegister);
 
-        errorMessage = !response.Success ? response.Message : string.Empty;
+        responseMessage = response.Message;
+        if (!response.Success)
+            messageCss = "text-danger";
+        else
+            messageCss = "text-success";
+
+
     }
 }
